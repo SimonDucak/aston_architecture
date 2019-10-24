@@ -2,7 +2,7 @@
   <div class="home">
     <h3>{{insurerPerson.firstName}}</h3>
     <label for="firstName">On keypress</label>
-    <input id="firstName" placeholder="First name" v-store-model-keyup="insurerPerson.firstName" show-validators="blur">
+    <input id="firstName" placeholder="First name" v-store-model="insurerPerson.firstName" show-validators="blur">
     <err-group
       v-show="dirty.some(item => item === 'insurerPerson.firstName')"
       name="err-group"
@@ -23,7 +23,7 @@
 
     <h3>{{insurerPerson.lastName}}</h3>
     <label for="lastName">On blur</label>
-    <input id="lastName" placeholder="Last name" v-store-model-blur="insurerPerson.lastName">
+    <input id="lastName" placeholder="Last name" v-store-model="insurerPerson.lastName" commit-on="blur">
     <err-group
       name="err-group"
       :value="insurerPerson.lastName"
