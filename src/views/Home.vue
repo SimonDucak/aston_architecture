@@ -1,18 +1,71 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h3>{{insurerPerson.firstName}}</h3>
+    <label for="firstName">On keypress</label>
+    <input id="firstName" placeholder="First name" v-store-model-keyup="insurerPerson.firstName" show-validators="blur">
+    <err-group
+      v-show="dirty.some(item => item === 'insurerPerson.firstName')"
+      name="err-group"
+      :value="insurerPerson.firstName"
+      :validators="[
+        {
+          validatorName: 'required',
+          message: 'Meno je povinný údaj',
+        },
+        {
+          validatorName: 'minMaxString',
+          params: { min: 3, max: 8 },
+          message: 'Min. počet znakov je 3 a max. 8',
+        },
+      ]"
+    />
+    <button @click="$store.commit('insurerPerson/SET_FIRST_NAME', '')">Remove firstName</button>
+
+    <h3>{{insurerPerson.lastName}}</h3>
+    <label for="lastName">On blur</label>
+    <input id="lastName" placeholder="Last name" v-store-model-blur="insurerPerson.lastName">
+    <err-group
+      name="err-group"
+      :value="insurerPerson.lastName"
+      :validators="[
+        {
+          validatorName: 'required',
+          message: 'Priezvisko je povinný údaj',
+        },
+        {
+          validatorName: 'minMaxString',
+          params: { min: 3, max: 8 },
+          message: 'Min. počet znakov je 3 a max. 8',
+        },
+      ]"
+    />
+    <button @click="$store.commit('insurerPerson/SET_LAST_NAME', '')">Remove lastName</button>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import ErrGroup from "../components/ErrGroup";
+import { componentValidatorsMixin } from "../mixins";
+import Err from "../components/Err";
 
 export default {
-  name: 'home',
+  mixins: [
+    componentValidatorsMixin()
+  ],
   components: {
-    HelloWorld
-  }
+    Err,
+    ErrGroup,
+  },
+  data() {
+    return {
+      dirty: [],
+    };
+  },
+  name: 'home',
+  computed: {
+    insurerPerson() {
+      return this.$store.state.insurerPerson;
+    },
+  },
 }
 </script>
